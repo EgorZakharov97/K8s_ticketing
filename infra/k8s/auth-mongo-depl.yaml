@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-mongo-depl
+spec: 
+  replicas: 1
+  selector:
+    # Step 1
+    # tell the deployment how to find all the pods
+    # that its going to create
+    matchLabels:
+      app: auth-mongo
+  template:
+    # Step 2
+    # How to create each individual pod that this deployment is going to create
+    metadata:
+      labels:
+        app: auth-mongo
+    spec:
+      containers:
+        - name: auth-mongo
+          image: mongo # the name of the image we buld in the docker
+
+---
+# We are using default CluserIP service
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-mongo-srv
+spec:
+  selector:
+    # We want to find all services with app: auth
+    app: auth-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017 # as in the code of the app
+      targetPort: 27017

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec: 
+  replicas: 1
+  selector:
+    # Step 1
+    # tell the deployment how to find all the pods
+    # that its going to create
+    matchLabels:
+      app: auth
+  template:
+    # Step 2
+    # How to create each individual pod that this deployment is going to create
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: egorzakharov/auth # the name of the image we buld in the docker
+          env:
+            # name inside container
+            # cubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+
+---
+# We are using default CluserIP service
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    # We want to find all services with app: auth
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000 # as in the code of the app
+      targetPort: 3000
