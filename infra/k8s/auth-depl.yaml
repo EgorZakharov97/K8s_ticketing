@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: egorzakharov/auth # the name of the image we buld in the docker
+          image: mang0g0rilla/auth # the name of the image we buld in the docker
           env:
             # name inside container
             # cubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf

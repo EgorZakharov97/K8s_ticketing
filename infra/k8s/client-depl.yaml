@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec: 
+  replicas: 1
+  selector:
+    # Step 1
+    # tell the deployment how to find all the pods
+    # that its going to create
+    matchLabels:
+      app: client
+  template:
+    # Step 2
+    # How to create each individual pod that this deployment is going to create
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: mang0g0rilla/client # the name of the image we buld in the docker
+
+---
+# We are using default CluserIP service
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec:
+  selector:
+    # We want to find all services with app: client
+    app: client
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000 # as in the code of the app
+      targetPort: 3000
