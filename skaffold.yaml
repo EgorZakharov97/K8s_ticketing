@@ -17,11 +17,3 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: mang0g0rilla/client
-      context: client
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: '**/*.ts'
-            dest: .
